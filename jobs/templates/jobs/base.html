@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JobBoard MVP</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .job { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+        .job h3 { margin-top: 0; }
+        .search-box { background: #f5f5f5; padding: 20px; margin-bottom: 20px; }
+        form { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="{% url 'job_list' %}">JobBoard</a></h1>
+        <a href="{% url 'job_post' %}">Post a Job</a>  <!-- Use URL name -->
+    </header>    
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

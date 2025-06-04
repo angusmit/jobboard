@@ -1,0 +1,23 @@
+{% extends 'jobs/base.html' %}
+
+{% block content %}
+<div class="search-box">
+    <form method="get">
+        <input type="text" name="q" placeholder="Search jobs..." value="{{ request.GET.q }}">
+        <input type="text" name="location" placeholder="Location" value="{{ request.GET.location }}">
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<h2>Available Jobs</h2>
+{% for job in jobs %}
+    <div class="job">
+        <h3><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h3>
+        <p><strong>{{ job.company }}</strong> - {{ job.location }}</p>
+        <p>{{ job.description|truncatewords:30 }}</p>
+        <small>Posted: {{ job.created_at|date:"M d, Y" }}</small>
+    </div>
+{% empty %}
+    <p>No jobs found. Try different search terms.</p>
+{% endfor %}
+{% endblock %}
