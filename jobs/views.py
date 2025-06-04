@@ -1,6 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Job
 from .forms import JobForm
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
+from .forms import JobSeekerSignUpForm, EmployerSignUpForm
+from django.contrib.auth.decorators import login_required
 
 def job_list(request):
     jobs = Job.objects.filter(is_approved=True)
@@ -26,6 +30,49 @@ def job_post(request):
         if form.is_valid():
             job = form.save(commit=False)
             job.is_approved = False  # Needs admin approval
+            job.save()
+            return render(request, 'jobs/job_post_success.html')
+    else:
+        form = JobForm()
+    return render(request, 'jobs/job_post.html', {'form': form})
+
+
+
+def signup(request):
+    return render(request, 'jobs/signup.html')
+
+def jobseeker_signup(request):
+    if request.method == 'POST':
+        form = JobSeekerSignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('job_list')
+    else:
+        form = JobSeekerSignUpForm()
+    return render(request, 'jobs/jobseeker_signup.html', {'form': form})
+
+def employer_signup(request):
+    if request.method == 'POST':
+        form = EmployerSignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('job_list')
+    else:
+        form = EmployerSignUpForm()
+    return render(request, 'jobs/employer_signup.html', {'form': form})
+
+
+
+@login_required
+def job_post(request):
+    if request.method == "POST":
+        form = JobForm(request.POST)
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.employer = request.user  # Set current user as employer
+            job.is_approved = False
             job.save()
             return render(request, 'jobs/job_post_success.html')
     else:

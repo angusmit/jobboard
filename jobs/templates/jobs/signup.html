@@ -1,0 +1,10 @@
+{% extends 'jobs/base.html' %}
+
+{% block content %}
+<h2>Sign Up</h2>
+<div class="signup-options">
+  <a href="{% url 'jobseeker_signup' %}" class="btn">I'm a Job Seeker</a>
+  <a href="{% url 'employer_signup' %}" class="btn">I'm an Employer</a>
+</div>
+<p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+{% endblock %}
